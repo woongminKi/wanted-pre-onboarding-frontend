@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -16,9 +17,32 @@ export default function SignIn() {
   };
 
   const handleSignIn = () => {
+    async function fetchSignIn() {
+      try {
+        const response = await axios.post(
+          "https://pre-onboarding-selection-task.shop/auth/signin",
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            email,
+            password: passWord,
+          }
+        );
+
+        localStorage.setItem("accessToken", response.data.access_token);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchSignIn();
     setIsClicked(true);
-    navigate("/todo");
   };
+
+  if (localStorage.getItem("accessToken")) {
+    navigate("/todo");
+  }
 
   useEffect(() => {
     if (email.includes("@") && passWord.length >= 8) {

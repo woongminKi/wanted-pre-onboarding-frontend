@@ -15,32 +15,33 @@ export default function SignUp() {
   const handlePWChange = (e) => {
     setPassWord(e.target.value);
   };
-  console.log("email:", email, typeof email);
-  console.log("passWord:", passWord, typeof passWord);
 
-  const handleSignIn = () => {
+  const handleSignUp = () => {
     async function fetchSignUp() {
       try {
-        const response = await axios.post(
+        await axios.post(
           "https://pre-onboarding-selection-task.shop/auth/signup",
           {
             headers: {
-              "Content-Type": `application/json`,
+              "Content-Type": "application/json",
             },
-            body: {
-              email,
-              password: passWord,
-            },
+            email,
+            password: passWord,
           }
         );
-        console.log("response::", response);
       } catch (err) {
         console.error(err);
       }
     }
+
     fetchSignUp();
     setIsClicked(true);
+    navigate("/signin");
   };
+
+  if (localStorage.getItem("accessToken")) {
+    navigate("/todo");
+  }
 
   useEffect(() => {
     if (email.includes("@") && passWord.length >= 8) {
@@ -70,7 +71,7 @@ export default function SignUp() {
       />
       <button
         id="login-button"
-        onClick={handleSignIn}
+        onClick={handleSignUp}
         data-testid="signup-button"
         disabled={validate}
       >
