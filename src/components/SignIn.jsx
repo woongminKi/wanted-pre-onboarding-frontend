@@ -37,7 +37,10 @@ export default function SignIn() {
     }
 
     fetchSignIn();
-    setIsClicked(true);
+
+    if (localStorage.getItem("accessToken")) {
+      navigate("/todo");
+    }
   };
 
   if (localStorage.getItem("accessToken")) {
