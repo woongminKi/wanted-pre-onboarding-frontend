@@ -7,7 +7,6 @@ export default function SignIn() {
   const [passWord, setPassWord] = useState("");
   const [isClicked, setIsClicked] = useState(false);
   const [validate, setValidate] = useState(true);
-  const [accessToken, setAccessToken] = useState([]);
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
@@ -30,7 +29,7 @@ export default function SignIn() {
             password: passWord,
           }
         );
-        console.log("response:", response);
+
         localStorage.setItem("accessToken", response.data.access_token);
       } catch (err) {
         console.error(err);
