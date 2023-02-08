@@ -5,13 +5,47 @@ import { useNavigate } from "react-router";
 export default function Todo() {
   const navigate = useNavigate();
   const [todo, setTodo] = useState("");
+  const [editTodo, setEditTodo] = useState("");
   const [todoList, setTodoList] = useState([]);
+  const [editButtonClick, setEditButtonClick] = useState(false);
+  const [editTargetId, setEditTargetId] = useState(null);
+  const [checkCompleted, setCheckCompleted] = useState(false);
+  const [cancelButtonClick, setCancelButtonClick] = useState(false);
   const accessToken = `Bearer ${localStorage.getItem("accessToken")}`;
 
   if (!localStorage.getItem("accessToken")) {
     navigate("/signin");
   }
 
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: accessToken,
+  };
+
+  const updateTodoList = (id, isCompleted, todo) => {
+    async function updateTodoListData() {
+      try {
+        const data = {
+          todo,
+          isCompleted,
+        };
+
+        await axios.put(
+          `https://pre-onboarding-selection-task.shop/todos/${id}`,
+          { todo: data.todo, isCompleted: data.isCompleted },
+          {
+            headers,
+          }
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    updateTodoListData();
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getTodoList = () => {
     async function fetchTodoList() {
       try {
@@ -34,10 +68,6 @@ export default function Todo() {
   const addTodoList = () => {
     async function postTodoList() {
       try {
-        const headers = {
-          "Content-Type": "application/json",
-          Authorization: accessToken,
-        };
         const data = {
           todo,
         };
@@ -57,13 +87,56 @@ export default function Todo() {
     postTodoList();
   };
 
+  const editTodoList = (e) => {
+    setEditTargetId(e.target.value);
+    setEditButtonClick(true);
+    setCancelButtonClick(false);
+  };
+
   const handleTodo = (e) => {
     setTodo(e.target.value);
   };
 
+  const handleEditTodo = (e) => {
+    setTodo(e.target.value);
+  };
+
+  const handleUpdateButton = (e) => {
+    const targetId = e.target.value;
+    let todoValue = "";
+
+    todoList.forEach((element) => {
+      if (element.id === Number(targetId)) {
+        todoValue = todo;
+      }
+    });
+
+    updateTodoList(targetId, checkCompleted, todoValue);
+    window.location.reload();
+  };
+
+  const handleCheckButton = (e) => {
+    const targetId = e.target.value;
+    const isCompleted = e.target.checked;
+    let todoValue = "";
+
+    todoList.forEach((element) => {
+      if (element.id === Number(targetId)) {
+        todoValue = element.todo;
+      }
+    });
+
+    setCheckCompleted(e.target.checked);
+    updateTodoList(targetId, isCompleted, todoValue);
+  };
+
+  const handleCancelButton = () => {
+    setCancelButtonClick(true);
+  };
+
   useEffect(() => {
     getTodoList();
-  }, [todoList]);
+  }, [getTodoList]);
 
   return (
     <>
@@ -75,14 +148,79 @@ export default function Todo() {
 
       {todoList.map((item) => {
         return (
-          <li key={item.id}>
-            <label>
-              <input type="checkbox" />
-              <span>{item.todo}</span>
-            </label>
-            <button data-testid="modify-button">수정</button>
-            <button data-testid="delete-button">삭제</button>
-          </li>
+          <>
+            {!editButtonClick ? (
+              <li key={item.id}>
+                <label>
+                  <input
+                    value={item.id}
+                    onClick={(e) => handleCheckButton(e)}
+                    type="checkbox"
+                  />
+                  <span>{item.todo}</span>
+                </label>
+                <button
+                  value={item.id}
+                  onClick={(e) => editTodoList(e)}
+                  data-testid="modify-button"
+                >
+                  수정
+                </button>
+                <button data-testid="delete-button">삭제</button>
+              </li>
+            ) : (
+              <>
+                {item.id === Number(editTargetId) && !cancelButtonClick ? (
+                  <li key={item.id}>
+                    <label>
+                      <input
+                        value={item.id}
+                        onClick={(e) => handleCheckButton(e)}
+                        type="checkbox"
+                      />
+                      <input
+                        defaultValue={item.todo}
+                        onChange={handleEditTodo}
+                        type="text"
+                      />
+                    </label>
+                    <button
+                      value={item.id}
+                      onClick={(e) => handleUpdateButton(e)}
+                      data-testid="submit-button"
+                    >
+                      제출
+                    </button>
+                    <button
+                      onClick={handleCancelButton}
+                      data-testid="cancel-button"
+                    >
+                      취소
+                    </button>
+                  </li>
+                ) : (
+                  <li key={item.id}>
+                    <label>
+                      <input
+                        value={item.id}
+                        onClick={(e) => handleCheckButton(e)}
+                        type="checkbox"
+                      />
+                      <span>{item.todo}</span>
+                    </label>
+                    <button
+                      value={item.id}
+                      onClick={(e) => editTodoList(e)}
+                      data-testid="modify-button"
+                    >
+                      수정
+                    </button>
+                    <button data-testid="delete-button">삭제</button>
+                  </li>
+                )}
+              </>
+            )}
+          </>
         );
       })}
     </>
