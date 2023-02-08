@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 export default function Todo() {
   const navigate = useNavigate();
   const [todo, setTodo] = useState("");
-  const [editTodo, setEditTodo] = useState("");
   const [todoList, setTodoList] = useState([]);
   const [editButtonClick, setEditButtonClick] = useState(false);
   const [editTargetId, setEditTargetId] = useState(null);
@@ -93,6 +92,24 @@ export default function Todo() {
     setCancelButtonClick(false);
   };
 
+  const deleteTodoList = (e) => {
+    const targetId = e.target.value;
+
+    async function removeTodoList() {
+      try {
+        await axios.delete(
+          `https://pre-onboarding-selection-task.shop/todos/${targetId}`,
+          {
+            headers,
+          }
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    removeTodoList();
+  };
+
   const handleTodo = (e) => {
     setTodo(e.target.value);
   };
@@ -166,7 +183,13 @@ export default function Todo() {
                 >
                   수정
                 </button>
-                <button data-testid="delete-button">삭제</button>
+                <button
+                  value={item.id}
+                  onClick={(e) => deleteTodoList(e)}
+                  data-testid="delete-button"
+                >
+                  삭제
+                </button>
               </li>
             ) : (
               <>
@@ -215,7 +238,13 @@ export default function Todo() {
                     >
                       수정
                     </button>
-                    <button data-testid="delete-button">삭제</button>
+                    <button
+                      value={item.id}
+                      onClick={deleteTodoList}
+                      data-testid="delete-button"
+                    >
+                      삭제
+                    </button>
                   </li>
                 )}
               </>
