@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import styled from "styled-components";
 
 export default function Todo() {
   const navigate = useNavigate();
@@ -156,12 +157,12 @@ export default function Todo() {
   }, [getTodoList]);
 
   return (
-    <>
+    <Container>
       <h1>To Do List</h1>
-      <input onChange={handleTodo} data-testid="new-todo-input" />
-      <button onClick={addTodoList} data-testid="new-todo-add-button">
+      <AddInput onChange={handleTodo} data-testid="new-todo-input" />
+      <AddButton onClick={addTodoList} data-testid="new-todo-add-button">
         추가
-      </button>
+      </AddButton>
 
       {todoList.map((item) => {
         return (
@@ -170,26 +171,27 @@ export default function Todo() {
               <li key={item.id}>
                 <label>
                   <input
+                    id="check-button"
                     value={item.id}
                     onClick={(e) => handleCheckButton(e)}
                     type="checkbox"
                   />
                   <span>{item.todo}</span>
                 </label>
-                <button
+                <ItemButton
                   value={item.id}
                   onClick={(e) => editTodoList(e)}
                   data-testid="modify-button"
                 >
                   수정
-                </button>
-                <button
+                </ItemButton>
+                <ItemButton
                   value={item.id}
                   onClick={(e) => deleteTodoList(e)}
                   data-testid="delete-button"
                 >
                   삭제
-                </button>
+                </ItemButton>
               </li>
             ) : (
               <>
@@ -201,25 +203,25 @@ export default function Todo() {
                         onClick={(e) => handleCheckButton(e)}
                         type="checkbox"
                       />
-                      <input
+                      <EditInput
                         defaultValue={item.todo}
                         onChange={handleEditTodo}
                         type="text"
                       />
                     </label>
-                    <button
+                    <ItemButton
                       value={item.id}
                       onClick={(e) => handleUpdateButton(e)}
                       data-testid="submit-button"
                     >
                       제출
-                    </button>
-                    <button
+                    </ItemButton>
+                    <ItemButton
                       onClick={handleCancelButton}
                       data-testid="cancel-button"
                     >
                       취소
-                    </button>
+                    </ItemButton>
                   </li>
                 ) : (
                   <li key={item.id}>
@@ -231,20 +233,20 @@ export default function Todo() {
                       />
                       <span>{item.todo}</span>
                     </label>
-                    <button
+                    <ItemButton
                       value={item.id}
                       onClick={(e) => editTodoList(e)}
                       data-testid="modify-button"
                     >
                       수정
-                    </button>
-                    <button
+                    </ItemButton>
+                    <ItemButton
                       value={item.id}
                       onClick={deleteTodoList}
                       data-testid="delete-button"
                     >
                       삭제
-                    </button>
+                    </ItemButton>
                   </li>
                 )}
               </>
@@ -252,6 +254,49 @@ export default function Todo() {
           </>
         );
       })}
-    </>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  padding: 10px 0;
+  text-align: center;
+`;
+
+const AddInput = styled.input`
+  margin: 0 5px 10px 0;
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  width: 200px;
+  height: 30px;
+`;
+
+const EditInput = styled.input`
+  margin-bottom: 10px;
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  width: 150px;
+  height: 20px;
+`;
+
+const CheckBoxWrapper = styled.span``;
+
+const AddButton = styled.button`
+  margin-right: 15px;
+  padding: 10px 20px 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #3366ff;
+  color: white;
+  cursor: pointer;
+`;
+
+const ItemButton = styled.button`
+  margin: 0 2px 3px 5px;
+  padding: 5px 10px 5px 10px;
+  border: none;
+  border-radius: 8px;
+  background: #3366ff;
+  color: white;
+  cursor: pointer;
+`;

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import styled from "styled-components";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [passWord, setPassWord] = useState("");
-  const [isClicked, setIsClicked] = useState(false);
   const [validate, setValidate] = useState(true);
   const navigate = useNavigate();
 
@@ -35,7 +35,6 @@ export default function SignUp() {
     }
 
     fetchSignUp();
-    setIsClicked(true);
     navigate("/signin");
   };
 
@@ -50,33 +49,65 @@ export default function SignUp() {
   }, [email, passWord]);
 
   return (
-    <>
-      <h1>로그인</h1>
-      <input
-        type="email"
-        id="email"
-        pattern=".+@gmail\.com"
-        value={email}
-        onChange={handleEmailChange}
-        data-testid="email-input"
-        placeholder="email"
-      />
-      <input
-        type="password"
-        id="pw"
-        value={passWord}
-        onChange={handlePWChange}
-        data-testid="password-input"
-        placeholder="비밀 번호"
-      />
-      <button
-        id="login-button"
+    <Container>
+      <h1>회원 가입</h1>
+      <div>
+        <Input
+          type="email"
+          id="email"
+          pattern=".+@gmail\.com"
+          value={email}
+          onChange={handleEmailChange}
+          data-testid="email-input"
+          placeholder="email"
+        />
+      </div>
+      <div>
+        <Input
+          type="password"
+          id="pw"
+          value={passWord}
+          onChange={handlePWChange}
+          data-testid="password-input"
+          placeholder="비밀 번호"
+        />
+      </div>
+      <Button
+        className="signup-button"
         onClick={handleSignUp}
         data-testid="signup-button"
         disabled={validate}
       >
         회원가입
-      </button>
-    </>
+      </Button>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  padding: 200px 0;
+  text-align: center;
+
+  .signup-button:hover {
+    padding: 20px 45px 20px 45px;
+    transition: all 0.2s linear 0s;
+  }
+`;
+
+const Input = styled.input`
+  margin-bottom: 10px;
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  width: 200px;
+  height: 30px;
+`;
+
+const Button = styled.button`
+  margin-right: 15px;
+  padding: 15px 40px 15px 40px;
+  border: none;
+  border-radius: 8px;
+  background: #3366ff;
+  color: white;
+  cursor: pointer;
+`;
