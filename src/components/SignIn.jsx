@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import styled from "styled-components";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [passWord, setPassWord] = useState("");
-  const [isClicked, setIsClicked] = useState(false);
   const [validate, setValidate] = useState(true);
   const navigate = useNavigate();
 
@@ -54,33 +54,65 @@ export default function SignIn() {
   }, [email, passWord]);
 
   return (
-    <>
+    <Container>
       <h1>로그인</h1>
-      <input
-        type="email"
-        id="email"
-        pattern=".+@gmail\.com"
-        value={email}
-        onChange={handleEmailChange}
-        data-testid="email-input"
-        placeholder="email"
-      />
-      <input
-        type="password"
-        id="pw"
-        value={passWord}
-        onChange={handlePWChange}
-        data-testid="password-input"
-        placeholder="비밀 번호"
-      />
-      <button
-        id="login-button"
+      <div>
+        <Input
+          type="email"
+          id="email"
+          pattern=".+@gmail\.com"
+          value={email}
+          onChange={handleEmailChange}
+          data-testid="email-input"
+          placeholder="email"
+        />
+      </div>
+      <div>
+        <Input
+          type="password"
+          id="pw"
+          value={passWord}
+          onChange={handlePWChange}
+          data-testid="password-input"
+          placeholder="비밀 번호"
+        />
+      </div>
+      <Button
+        className="login-button"
         onClick={handleSignIn}
         data-testid="signin-button"
         disabled={validate}
       >
         로그인
-      </button>
-    </>
+      </Button>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  padding: 200px 0;
+  text-align: center;
+
+  .login-button:hover {
+    padding: 20px 45px 20px 45px;
+    transition: all 0.2s linear 0s;
+  }
+`;
+
+const Input = styled.input`
+  margin-bottom: 10px;
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  width: 200px;
+  height: 30px;
+`;
+
+const Button = styled.button`
+  margin-right: 15px;
+  padding: 15px 40px 15px 40px;
+  border: none;
+  border-radius: 8px;
+  background: #3366ff;
+  color: white;
+  cursor: pointer;
+`;
