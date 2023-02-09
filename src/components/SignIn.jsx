@@ -37,21 +37,20 @@ export default function SignIn() {
     }
 
     fetchSignIn();
-
-    if (localStorage.getItem("accessToken")) {
-      navigate("/todo");
-    }
-  };
-
-  if (localStorage.getItem("accessToken")) {
     navigate("/todo");
-  }
+  };
 
   useEffect(() => {
     if (email.includes("@") && passWord.length >= 8) {
       setValidate(false);
     }
   }, [email, passWord]);
+
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+      navigate("/todo");
+    }
+  }, []);
 
   return (
     <Container>
@@ -60,7 +59,6 @@ export default function SignIn() {
         <Input
           type="email"
           id="email"
-          pattern=".+@gmail\.com"
           value={email}
           onChange={handleEmailChange}
           data-testid="email-input"

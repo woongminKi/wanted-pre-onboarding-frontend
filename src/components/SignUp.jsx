@@ -38,15 +38,17 @@ export default function SignUp() {
     navigate("/signin");
   };
 
-  if (localStorage.getItem("accessToken")) {
-    navigate("/todo");
-  }
-
   useEffect(() => {
     if (email.includes("@") && passWord.length >= 8) {
       setValidate(false);
     }
   }, [email, passWord]);
+
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+      navigate("/todo");
+    }
+  }, []);
 
   return (
     <Container>
@@ -55,7 +57,6 @@ export default function SignUp() {
         <Input
           type="email"
           id="email"
-          pattern=".+@gmail\.com"
           value={email}
           onChange={handleEmailChange}
           data-testid="email-input"
