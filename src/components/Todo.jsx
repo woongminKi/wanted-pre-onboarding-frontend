@@ -108,6 +108,7 @@ export default function Todo() {
         console.error(err);
       }
     }
+
     removeTodoList();
   };
 
@@ -207,6 +208,7 @@ export default function Todo() {
                         defaultValue={item.todo}
                         onChange={handleEditTodo}
                         type="text"
+                        data-testid="modify-input"
                       />
                     </label>
                     <ItemButton
