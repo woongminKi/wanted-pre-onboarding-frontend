@@ -281,8 +281,6 @@ const EditInput = styled.input`
   height: 20px;
 `;
 
-const CheckBoxWrapper = styled.span``;
-
 const AddButton = styled.button`
   margin-right: 15px;
   padding: 10px 20px 10px 20px;
