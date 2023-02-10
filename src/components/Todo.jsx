@@ -165,10 +165,10 @@ export default function Todo() {
         추가
       </AddButton>
 
-      {todoList.map((item) => {
-        return (
-          <>
-            {!editButtonClick ? (
+      {!editButtonClick &&
+        todoList.map((item) => {
+          return (
+            !editButtonClick && (
               <li key={item.id}>
                 <label>
                   <input
@@ -194,68 +194,68 @@ export default function Todo() {
                   삭제
                 </ItemButton>
               </li>
-            ) : (
-              <>
-                {item.id === Number(editTargetId) && !cancelButtonClick ? (
-                  <li key={item.id}>
-                    <label>
-                      <input
-                        value={item.id}
-                        onClick={(e) => handleCheckButton(e)}
-                        type="checkbox"
-                      />
-                      <EditInput
-                        defaultValue={item.todo}
-                        onChange={handleEditTodo}
-                        type="text"
-                        data-testid="modify-input"
-                      />
-                    </label>
-                    <ItemButton
-                      value={item.id}
-                      onClick={(e) => handleUpdateButton(e)}
-                      data-testid="submit-button"
-                    >
-                      제출
-                    </ItemButton>
-                    <ItemButton
-                      onClick={handleCancelButton}
-                      data-testid="cancel-button"
-                    >
-                      취소
-                    </ItemButton>
-                  </li>
-                ) : (
-                  <li key={item.id}>
-                    <label>
-                      <input
-                        value={item.id}
-                        onClick={(e) => handleCheckButton(e)}
-                        type="checkbox"
-                      />
-                      <span>{item.todo}</span>
-                    </label>
-                    <ItemButton
-                      value={item.id}
-                      onClick={(e) => editTodoList(e)}
-                      data-testid="modify-button"
-                    >
-                      수정
-                    </ItemButton>
-                    <ItemButton
-                      value={item.id}
-                      onClick={deleteTodoList}
-                      data-testid="delete-button"
-                    >
-                      삭제
-                    </ItemButton>
-                  </li>
-                )}
-              </>
-            )}
-          </>
-        );
-      })}
+            )
+          );
+        })}
+
+      {editButtonClick &&
+        todoList.map((item) => {
+          return item.id === Number(editTargetId) && !cancelButtonClick ? (
+            <li key={item.id}>
+              <label>
+                <input
+                  value={item.id}
+                  onClick={(e) => handleCheckButton(e)}
+                  type="checkbox"
+                />
+                <EditInput
+                  defaultValue={item.todo}
+                  onChange={handleEditTodo}
+                  type="text"
+                  data-testid="modify-input"
+                />
+              </label>
+              <ItemButton
+                value={item.id}
+                onClick={(e) => handleUpdateButton(e)}
+                data-testid="submit-button"
+              >
+                제출
+              </ItemButton>
+              <ItemButton
+                onClick={handleCancelButton}
+                data-testid="cancel-button"
+              >
+                취소
+              </ItemButton>
+            </li>
+          ) : (
+            <li key={item.id}>
+              <label>
+                <input
+                  value={item.id}
+                  onClick={(e) => handleCheckButton(e)}
+                  type="checkbox"
+                />
+                <span>{item.todo}</span>
+              </label>
+              <ItemButton
+                value={item.id}
+                onClick={(e) => editTodoList(e)}
+                data-testid="modify-button"
+              >
+                수정
+              </ItemButton>
+              <ItemButton
+                value={item.id}
+                onClick={deleteTodoList}
+                data-testid="delete-button"
+              >
+                삭제
+              </ItemButton>
+            </li>
+          );
+        })}
     </Container>
   );
 }
