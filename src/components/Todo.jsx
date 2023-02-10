@@ -43,7 +43,6 @@ export default function Todo() {
     }
 
     updateTodoListData();
-    window.location.reload();
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -132,6 +131,7 @@ export default function Todo() {
     });
 
     updateTodoList(targetId, checkCompleted, todoValue);
+    window.location.reload();
   };
 
   const handleCheckButton = (e) => {
