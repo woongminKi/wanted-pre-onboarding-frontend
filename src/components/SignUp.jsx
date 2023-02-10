@@ -41,6 +41,8 @@ export default function SignUp() {
   useEffect(() => {
     if (email.includes("@") && passWord.length >= 8) {
       setValidate(false);
+    } else {
+      setValidate(true);
     }
   }, [email, passWord]);
 
@@ -108,7 +110,7 @@ const Button = styled.button`
   padding: 15px 40px 15px 40px;
   border: none;
   border-radius: 8px;
-  background: #3366ff;
+  background: ${(props) => (props.disabled ? "#3399ff" : "#3366ff")};
   color: white;
   cursor: pointer;
 `;
